@@ -31,7 +31,7 @@ export default function Home() {
     try {
 
       const res = await axios.post(
-        "http://localhost:8008/api/repo-summary",
+        "https://repomind-backend-ckrk.onrender.com",
         { repoUrl: url }
       );
 
