@@ -14,9 +14,7 @@ const {
 
 let repoContext = "";
 
-// =====================================
-// REPO SUMMARY
-// =====================================
+//repo summary
 exports.getRepoSummary = async (
   req,
   res
@@ -26,11 +24,11 @@ exports.getRepoSummary = async (
 
   try {
 
-    // 🔥 fetch repo files
+    
     const files =
       await fetchRepoFiles(repoUrl);
 
-    // 🔥 filter relevant files
+    
     let relevantFiles =
       extractRelevantFiles(files);
 
@@ -44,8 +42,8 @@ exports.getRepoSummary = async (
 
     let combinedContent = "";
 
-    // 🔥 limit files for quota safety
-    for (let file of relevantFiles.slice(0, 15)) {
+    
+    for (let file of relevantFiles.slice(0, 8)) {
 
       if (file.download_url) {
 
@@ -54,7 +52,7 @@ exports.getRepoSummary = async (
             file.download_url
           );
 
-        // 🔥 ensure content is string
+        
         const safeContent =
           typeof content === "string"
             ? content
@@ -64,13 +62,17 @@ exports.getRepoSummary = async (
 
 FILE: ${file.path}
 
-${safeContent.slice(0, 2000)}
+${safeContent.slice(0, 1200)}
 
 `;
       }
     }
 
-    // 🔥 ONE AI CALL ONLY
+    
+    combinedContent =
+      combinedContent.slice(0, 15000);
+
+    
     const finalPrompt = `
 Analyze this GitHub repository.
 
@@ -101,7 +103,7 @@ ${combinedContent}
     const finalSummary =
       await analyzeCode(finalPrompt);
 
-    // 🔥 save context for chat
+    
     repoContext = combinedContent;
 
     res.json({
@@ -121,9 +123,7 @@ ${combinedContent}
   }
 };
 
-// =====================================
-// CHAT WITH REPO
-// =====================================
+//chat feature
 exports.chatWithRepo = async (
   req,
   res
@@ -154,7 +154,7 @@ Rules:
 
 Repository Context:
 
-${repoContext.slice(0, 12000)}
+${repoContext.slice(0, 5000)}
 
 User Question:
 ${question}

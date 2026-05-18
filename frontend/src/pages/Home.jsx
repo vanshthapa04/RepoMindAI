@@ -31,7 +31,7 @@ export default function Home() {
     try {
 
       const res = await axios.post(
-        "https://repomind-backend-ckrk.onrender.com",
+        "https://repomind-backend-ckrk.onrender.com/api/repo-summary",
         { repoUrl: url }
       );
 
@@ -64,7 +64,7 @@ export default function Home() {
     try {
 
       const res = await axios.post(
-        "http://localhost:8008/api/chat",
+        "https://repomind-backend-ckrk.onrender.com/api/chat",
         { question }
       );
 
